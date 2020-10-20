@@ -1,6 +1,6 @@
 platform: iOS
 buildPlatform:
-displayName: "Xcode Build For Testing"
+displayName: "Xcodebuild Build for Testing"
 description: "Build your application for testing."
 inputs:
 - key: "AC_REPOSITORY_DIR"
