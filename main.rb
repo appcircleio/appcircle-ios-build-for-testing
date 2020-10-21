@@ -39,6 +39,10 @@ def build(args)
   extname = File.extname(project_path)
   command = "xcodebuild -scheme \"#{scheme}\" BUILD_DIR=\"#{args[:xcode_build_dir]}\" -derivedDataPath \"#{args[:temporary_path]}/BuildForTestingDerivedData-#{$random_uuid}\" build-for-testing"
   
+  command.concat(" ")
+  command.concat("CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO")
+  command.concat(" ")
+
   if $configuration_name != nil
     command.concat(" ")
     command.concat("-configuration \"#{$configuration_name}\"")
@@ -115,8 +119,15 @@ if ac_app_path
 end
 
 if ac_uitests_runner_path
-  ac_uitests_runner_zip_path = "#{options[:xcode_build_dir]}/#{File.basename(ac_uitests_runner_path)}.zip"
-  runCommand("cd #{File.dirname(ac_uitests_runner_path)} && zip -r \"#{ac_uitests_runner_zip_path}\" \"#{File.basename(ac_uitests_runner_path)}\"")
+  payload_path = "#{options[:xcode_build_dir]}/PayloadUITestsRunner/Payload"
+  runCommand("mkdir -p #{payload_path}")
+  runCommand("cp -r #{ac_uitests_runner_path} #{payload_path}")
+
+  ac_payload_zip_path = "#{payload_path}.zip"
+  runCommand("cd #{File.dirname(payload_path)} && zip -r \"#{ac_payload_zip_path}\" \"#{File.basename(payload_path)}\"")
+
+  ac_uitests_runner_ipa_path = "#{File.dirname(ac_payload_zip_path)}/#{File.basename(ac_uitests_runner_path,'.app')}.ipa"
+  runCommand("cp -r \"#{ac_payload_zip_path}\" \"#{ac_uitests_runner_ipa_path}\"")
 end
 
 if ac_xctest_path
@@ -128,7 +139,7 @@ puts "AC_TEST_APP_PATH : #{ac_app_path}"
 puts "AC_UITESTS_RUNNER_PATH : #{ac_uitests_runner_path}"
 puts "AC_XCTEST_PATH : #{ac_xctest_path}"
 
-puts "AC_UITESTS_RUNNER_ZIP_PATH : #{ac_uitests_runner_zip_path}"
+puts "AC_UITESTS_RUNNER_IPA_PATH : #{ac_uitests_runner_ipa_path}"
 puts "AC_XCTEST_ZIP_PATH : #{ac_xctest_zip_path}"
 puts "AC_TEST_IPA_PATH : #{ac_ipa_path}"
 
@@ -137,7 +148,7 @@ open(ENV['AC_ENV_FILE_PATH'], 'a') { |f|
   f.puts "AC_TEST_APP_PATH=#{ac_app_path}"
   f.puts "AC_UITESTS_RUNNER_PATH=#{ac_uitests_runner_path}"
   f.puts "AC_XCTEST_PATH=#{ac_xctest_path}"
-  f.puts "AC_UITESTS_RUNNER_ZIP_PATH=#{ac_uitests_runner_zip_path}"
+  f.puts "AC_UITESTS_RUNNER_IPA_PATH=#{ac_uitests_runner_ipa_path}"
   f.puts "AC_XCTEST_ZIP_PATH=#{ac_xctest_zip_path}"
   f.puts "AC_TEST_IPA_PATH=#{ac_ipa_path}"
 }
