@@ -62,9 +62,9 @@ outputs:
   description: XCTest path.
   helpText:
 - key: "AC_UITESTS_RUNNER_IPA_PATH"
-  title: UI Tests Runner Zip Path
+  title: UI Tests Runner ipa Path
   defaultValue: "AC_UITESTS_RUNNER_IPA_PATH"
-  description: UI Tests Runner Zip path.
+  description: UI Tests Runner ipa path.
   helpText:
 - key: "AC_XCTEST_ZIP_PATH"
   title: XCTest Zip Path
