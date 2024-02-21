@@ -104,7 +104,7 @@ build(options)
 
 ac_app_path = Dir["#{options[:xcode_build_dir]}/*/*.app"].select{ |f| !f.include? "Tests-Runner"}.map{ |f| File.absolute_path f }[0]
 ac_uitests_runner_path = Dir["#{options[:xcode_build_dir]}/*/*.app"].select{ |f| f.include? "Tests-Runner"}.map{ |f| File.absolute_path f }[0]
-ac_xctest_path= Dir["#{ac_app_path}/Plugins/*.xctest"].select{ |f| File.exists? f }.map{ |f| File.absolute_path f }[0]
+ac_xctest_path= Dir["#{ac_app_path}/Plugins/*.xctest"].select{ |f| File.exist? f }.map{ |f| File.absolute_path f }[0]
 
 if ac_app_path
   payload_path = "#{options[:xcode_build_dir]}/Payload"
