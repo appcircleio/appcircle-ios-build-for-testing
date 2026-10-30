@@ -9,6 +9,8 @@ def env_has_key(key)
   return (ENV[key] != nil && ENV[key] !="") ? ENV[key] : abort("Missing #{key}.")
 end
 
+if __FILE__ == $PROGRAM_NAME
+
 options = {}
 options[:repository_path] = ENV["AC_REPOSITORY_DIR"]
 options[:temporary_path] = ENV["AC_TEMP_DIR"] || abort('Missing temporary path.')
@@ -31,6 +33,8 @@ end
 
 $random_uuid = SecureRandom.uuid
 options[:xcode_build_dir] = "#{options[:temporary_path]}/BuildForTestinDir-#{$random_uuid}"
+
+end # if __FILE__ == $PROGRAM_NAME
 
 def build(args)
   repository_path = args[:repository_path]
@@ -100,6 +104,8 @@ def runCommand(command)
   end
 end
 
+if __FILE__ == $PROGRAM_NAME
+
 build(options)
 
 ac_app_path = Dir["#{options[:xcode_build_dir]}/*/*.app"].select{ |f| !f.include? "Tests-Runner"}.map{ |f| File.absolute_path f }[0]
@@ -154,3 +160,5 @@ open(ENV['AC_ENV_FILE_PATH'], 'a') { |f|
 }
 
 exit 0
+
+end # if __FILE__ == $PROGRAM_NAME
