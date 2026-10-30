@@ -21,3 +21,13 @@ Output Variables
 - `$AC_UITESTS_RUNNER_ZIP_PATH`: UI Tests Runner Zip path.
 - `$AC_XCTEST_ZIP_PATH`: XCTest Zip path.
 - `$AC_TEST_IPA_PATH`: Test ipa path.
+
+## Running tests
+
+Requires [RSpec](https://rspec.info) gem and Ruby standard library (Coverage). No Gemfile or Bundler needed.
+
+```bash
+ruby test/test_main.rb
+```
+
+A pass/fail summary and a coverage report are printed at the end of each run.
